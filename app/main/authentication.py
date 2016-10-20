@@ -36,8 +36,8 @@ class UserApi(Resource):
         user = User.query.filter_by(username=username).first()
         if not user:
             abort(400)
-        return {'username': user}
+        return {'username': user.username, 'user_tasks': 'http://127.0.0.1:5000/todo/api/tasks/' + str(user.id)}
 
 
 api.add_resource(NewUserApi, '/todo/api/users', endpoint='users')
-api.add_resource(UserApi, '/todo/api/user/<int:id>', endpoint='get_user')
+api.add_resource(UserApi, '/todo/api/users/<username>', endpoint='get_user')
