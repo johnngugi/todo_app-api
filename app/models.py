@@ -32,6 +32,16 @@ class Tasks(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
+    @staticmethod
+    def from_json(json_post):
+        name = json_post.get('name')
+        description = json_post.get('description')
+        # creation_date = json_post.get('creation_date')
+        category = json_post.get('category')
+        priority = json_post.get('priority')
+
+        return Tasks(name=name, description=description, category=category, priority=priority)
+
     def to_json(self):
         json_task = {
             'id': self.id,
