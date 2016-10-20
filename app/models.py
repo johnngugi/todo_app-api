@@ -32,5 +32,17 @@ class Tasks(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
+    def to_json(self):
+        json_task = {
+            'id': self.id,
+            'name': self.name,
+            'description': self.description,
+            'creation_date': self.creation_date,
+            'is_done': self.is_done,
+            'category': self.category,
+            'priority': self.priority
+        }
+        return json_task
+
     def __repr__(self):
         return '<Role %r>' % self.name
