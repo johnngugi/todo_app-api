@@ -44,7 +44,7 @@ class Tasks(db.Model):
 
     def to_json(self):
         json_task = {
-            'id': self.id,
+            'url': 'http://127.0.0.1:5000/todo/api/tasks/' + str(self.id),
             'name': self.name,
             'description': self.description,
             'creation_date': self.creation_date,

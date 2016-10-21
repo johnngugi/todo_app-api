@@ -32,12 +32,25 @@ class NewUserApi(Resource):
 
 
 class UserApi(Resource):
-    def get(self, username):
-        user = User.query.filter_by(username=username).first()
+
+    decorators = [auth.login_required]
+
+    def get(self, id):
+        user = User.query.get(id)
         if not user:
             abort(400)
         return {'username': user.username, 'user_tasks': 'http://127.0.0.1:5000/todo/api/tasks/' + str(user.id)}
 
+    def put(self, id):
+        user = User.query.get(id)
+        if not user:
+            abort(404)
+        user.username = request.json.get('username')
+        user.hash_password(request.json.get('password'))
+        db.session.commit()
+        return {'username': user.username, 'user_tasks': 'http://127.0.0.1:5000/todo/api/tasks/' + str(user.id)}
 
-api.add_resource(NewUserApi, '/todo/api/users', endpoint='users')
-api.add_resource(UserApi, '/todo/api/users/<username>', endpoint='get_user')
+
+api.add_resource(NewUserApi, '/todo/api/users', endpoint='sign_up')
+api.add_resource(UserApi, '/todo/api/users/<id>', endpoint='get_user')
+api.add_resource(UserApi, '/todo/api/users/<username>', endpoint='users')
